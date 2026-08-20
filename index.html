@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4b1020" />
+    <meta name="description" content="Helen & Ian invite you to their Kuhingira and Wedding celebrations in Uganda, 26–28 November 2026." />
+    <meta property="og:title" content="Helen & Ian — Kuhingira & Wedding" />
+    <meta property="og:description" content="See you on our special day" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="public/assets/photo-30.webp" />
+    <title>Helen & Ian — Kuhingira & Wedding</title>
+    <link rel="preload" href="src/styles.css" as="style" />
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="petals" aria-hidden="true"></div>
+
+    <header class="hero" id="top">
+      <nav class="nav" aria-label="Invitation navigation">
+        <a href="#top" class="brand">H<span>&</span>I</a>
+        <div class="nav-links">
+          <a href="#events">Events</a>
+          <a href="#timeline">Timeline</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#rsvp">RSVP</a>
+        </div>
+      </nav>
+
+      <section class="hero-grid">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">A two-day celebration</p>
+          <h1>Helen <span>&</span> Ian</h1>
+          <p class="hero-subtitle">Kuhingira & Wedding Invitation</p>
+          <p class="hero-message">“See you on our special day”</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#events">Open invitation</a>
+            <button class="button ghost" id="addBothCalendar" type="button">Add both dates</button>
+          </div>
+        </div>
+
+        <div class="photo-stage reveal" aria-label="Animated couple photo showcase">
+          <div class="orbit-ring"></div>
+          <figure class="hero-card hero-card-main">
+            <img src="public/assets/photo-30.webp" alt="Helen and Ian smiling together" />
+          </figure>
+          <figure class="hero-card hero-card-side one">
+            <img src="public/assets/photo-18.webp" alt="Helen and Ian during an outing" />
+          </figure>
+          <figure class="hero-card hero-card-side two">
+            <img src="public/assets/photo-07.webp" alt="Helen and Ian seated together" />
+          </figure>
+        </div>
+      </section>
+
+      <div class="countdown reveal" id="countdown" aria-label="Countdown to Kuhingira">
+        <div><strong data-unit="days">0</strong><span>Days</span></div>
+        <div><strong data-unit="hours">0</strong><span>Hours</span></div>
+        <div><strong data-unit="minutes">0</strong><span>Minutes</span></div>
+        <div><strong data-unit="seconds">0</strong><span>Seconds</span></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section intro reveal">
+        <p class="kicker">White · Burgundy · Green</p>
+        <h2>One invitation, two beautiful chapters.</h2>
+        <p>
+          Join Helen & Ian for their Kuhingira in Mbarara and their Wedding celebration in Kabale in the same joyful week.
+        </p>
+      </section>
+
+      <section class="section event-section" id="events">
+        <div class="section-heading reveal">
+          <p class="kicker">Tap each card</p>
+          <h2>Celebration cards</h2>
+        </div>
+
+        <div class="event-cards">
+          <article class="flip-card reveal" tabindex="0" aria-label="Kuhingira invitation card">
+            <div class="flip-inner">
+              <div class="flip-face front kuhingira-card">
+                <p class="event-label">26 November 2026</p>
+                <h3>Kuhingira</h3>
+                <p>Helen & Ian</p>
+                <span>Tap to reveal</span>
+              </div>
+              <div class="flip-face back">
+                <p class="event-label">Kuhingira</p>
+                <h3>Late B. Nyakapanka’s Residence</h3>
+                <p>Nkokonjeru, Mbarara</p>
+                <p class="quote">“See you on our special day”</p>
+                <button class="mini-button calendar-event" data-event="kuhingira" type="button">Add Kuhingira</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="flip-card reveal" tabindex="0" aria-label="Wedding invitation card">
+            <div class="flip-inner">
+              <div class="flip-face front wedding-card">
+                <p class="event-label">28 November 2026</p>
+                <h3>Wedding</h3>
+                <p>Helen & Ian</p>
+                <span>Tap to reveal</span>
+              </div>
+              <div class="flip-face back">
+                <p class="event-label">Wedding ceremony</p>
+                <h3>St Peter’s Cathedral</h3>
+                <p>Rugarama, Kabale, Uganda</p>
+                <p><strong>Reception:</strong> Kabale Golf Course</p>
+                <button class="mini-button calendar-event" data-event="wedding" type="button">Add Wedding</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section timeline-section" id="timeline">
+        <div class="section-heading reveal">
+          <p class="kicker">The week of love</p>
+          <h2>Timeline</h2>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item reveal">
+            <span>26 Nov 2026</span>
+            <h3>Kuhingira</h3>
+            <p>Late B. Nyakapanka’s Residence, Nkokonjeru, Mbarara</p>
+          </article>
+          <article class="timeline-item reveal">
+            <span>28 Nov 2026</span>
+            <h3>Wedding</h3>
+            <p>St Peter’s Cathedral, Rugarama, Kabale</p>
+          </article>
+          <article class="timeline-item reveal">
+            <span>28 Nov 2026</span>
+            <h3>Reception</h3>
+            <p>Kabale Golf Course</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section gallery-section" id="gallery">
+        <div class="section-heading reveal">
+          <p class="kicker">Moments</p>
+          <h2>Animated memory gallery</h2>
+        </div>
+        <div class="marquee reveal" aria-label="Photo film strip">
+          <div class="marquee-track" id="marqueeTrack"></div>
+        </div>
+        <div class="gallery-grid" id="galleryGrid" aria-label="Helen and Ian photo gallery"></div>
+      </section>
+
+      <section class="section video-section reveal" aria-label="Video moments">
+        <div>
+          <p class="kicker">Motion moments</p>
+          <h2>Celebration clips</h2>
+        </div>
+        <div class="video-grid">
+          <video src="public/assets/moment-01.mp4" autoplay muted loop playsinline></video>
+          <video src="public/assets/moment-02.mp4" autoplay muted loop playsinline></video>
+        </div>
+      </section>
+
+      <section class="section rsvp-section" id="rsvp">
+        <div class="rsvp-card reveal">
+          <p class="kicker">RSVP</p>
+          <h2>Kindly confirm with Beckie Rwanika White</h2>
+          <div class="rsvp-actions">
+            <a class="button primary" href="https://wa.me/256747084996?text=Hello%20Beckie%2C%20I%20am%20RSVPing%20for%20Helen%20%26%20Ian%27s%20Kuhingira%20and%20Wedding." target="_blank" rel="noreferrer">WhatsApp Uganda</a>
+            <a class="button ghost" href="https://wa.me/447851026329?text=Hello%20Beckie%2C%20I%20am%20RSVPing%20for%20Helen%20%26%20Ian%27s%20Kuhingira%20and%20Wedding." target="_blank" rel="noreferrer">WhatsApp UK</a>
+            <a class="button light" href="tel:+256747084996">Call +256 747 084 996</a>
+            <a class="button light" href="tel:+447851026329">Call +44 785 102 6329</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Helen & Ian · Kuhingira 26 Nov 2026 · Wedding 28 Nov 2026</p>
+      <a href="#top">Back to top</a>
+    </footer>
+
+    <script src="src/app.js" type="module"></script>
+  </body>
+</html>

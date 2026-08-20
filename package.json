@@ -1,0 +1,20 @@
+{
+  "name": "helen-ian-kuhingira-wedding",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Animated e-card invitation for Helen & Ian's Kuhingira and Wedding celebrations.",
+  "scripts": {
+    "lint": "node scripts/lint.js",
+    "typecheck": "node scripts/typecheck.js",
+    "build": "node scripts/build.js",
+    "preview": "python3 -m http.server 4173"
+  },
+  "keywords": [
+    "invitation",
+    "wedding",
+    "kuhingira",
+    "ecard"
+  ],
+  "author": "",
+  "license": "UNLICENSED"
+}
