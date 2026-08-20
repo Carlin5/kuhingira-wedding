@@ -162,9 +162,11 @@ function wireEnvelope() {
     envelope.classList.add('is-opening');
     envelope.setAttribute('aria-expanded', 'true');
     const liftDelay = reduceMotion ? 0 : 620;
-    const revealDelay = reduceMotion ? 0 : 1650;
+    const zoomDelay = reduceMotion ? 0 : 1750;
+    const revealDelay = reduceMotion ? 0 : 2350;
 
     window.setTimeout(() => envelope.classList.add('is-lifting'), liftDelay);
+    window.setTimeout(() => envelope.classList.add('is-zooming'), zoomDelay);
     window.setTimeout(() => {
       document.body.classList.remove('is-sealed');
       playHeroIntro();
@@ -322,9 +324,24 @@ function wireLightbox() {
   });
 }
 
+function renderGlobe(photos) {
+  const globe = document.querySelector('#photoGlobe');
+  if (!globe) return;
+  const faces = photos.slice(0, 12);
+  globe.style.setProperty('--count', String(faces.length));
+  globe.innerHTML = faces
+    .map((photo, index) => `
+      <figure class="globe-face" style="--i: ${index}">
+        <img src="public/${photo.src}" alt="Helen and Ian memory ${index + 1}" loading="lazy" decoding="async">
+      </figure>
+    `)
+    .join('');
+}
+
 async function renderGallery() {
   const response = await fetch('public/assets/manifest.json');
   const { photos } = await response.json();
+  renderGlobe(photos);
   const trackOne = document.querySelector('#marqueeTrack');
   const trackTwo = document.querySelector('#marqueeTrackTwo');
   const galleryGrid = document.querySelector('#galleryGrid');

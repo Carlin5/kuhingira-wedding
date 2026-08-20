@@ -22,17 +22,23 @@
     <div class="envelope-stage" id="envelopeStage">
       <div class="envelope-scene">
         <button class="envelope" id="envelope" type="button" aria-label="Tap to open the invitation from Helen and Ian">
-          <span class="envelope-back"></span>
+          <span class="envelope-back"><span class="envelope-liner"></span></span>
           <span class="envelope-letter">
             <span class="letter-inner">
               <span class="letter-monogram">H <em>&</em> I</span>
               <span class="letter-title">Helen &amp; Ian</span>
+              <span class="letter-rule"></span>
               <span class="letter-line">Kuhingira &amp; Wedding</span>
               <span class="letter-dates">26 &amp; 28 November 2026</span>
             </span>
           </span>
-          <span class="envelope-body"></span>
-          <span class="envelope-flap"></span>
+          <span class="envelope-body">
+            <span class="body-crest">H<em>&amp;</em>I</span>
+            <span class="body-address">
+              <i></i><i></i><i></i>
+            </span>
+          </span>
+          <span class="envelope-flap"><span class="flap-crest">Helen &amp; Ian</span></span>
           <span class="envelope-seal"><em>H&amp;I</em></span>
           <span class="envelope-hint">Tap to open</span>
         </button>
@@ -62,17 +68,18 @@
           </div>
         </div>
 
-        <div class="photo-stage" aria-label="Animated couple photo showcase">
-          <div class="orbit-ring" data-parallax="0.05"></div>
-          <figure class="hero-card hero-card-main" data-parallax="-0.06">
-            <img src="public/assets/photo-30.webp" alt="Helen and Ian smiling together" width="900" height="1200" />
-          </figure>
-          <figure class="hero-card hero-card-side one" data-parallax="0.12">
-            <img src="public/assets/photo-18.webp" alt="Helen and Ian during an outing" width="600" height="800" loading="lazy" />
-          </figure>
-          <figure class="hero-card hero-card-side two" data-parallax="0.18">
-            <img src="public/assets/photo-07.webp" alt="Helen and Ian seated together" width="600" height="800" loading="lazy" />
-          </figure>
+        <div class="photo-stage" aria-label="Rotating globe of Helen and Ian photos">
+          <div class="globe-halo" aria-hidden="true"></div>
+          <div class="globe-wrap" data-parallax="-0.04">
+            <div class="globe-meridians" aria-hidden="true">
+              <i></i><i></i><i></i><i></i>
+            </div>
+            <div class="globe" id="photoGlobe">
+              <figure class="globe-face" style="--i: 0">
+                <img src="public/assets/photo-30.webp" alt="Helen and Ian smiling together" width="600" height="800" />
+              </figure>
+            </div>
+          </div>
         </div>
       </section>
 
