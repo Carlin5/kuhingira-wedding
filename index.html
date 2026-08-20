@@ -49,9 +49,9 @@
       <nav class="nav" aria-label="Invitation navigation">
         <a href="#top" class="brand">H<span>&</span>I</a>
         <div class="nav-links">
+          <a href="#invitation">Invitation</a>
           <a href="#events">Events</a>
-          <a href="#timeline">Timeline</a>
-          <a href="#gallery">Gallery</a>
+          <a href="#story">Our story</a>
           <a href="#rsvp">RSVP</a>
         </div>
       </nav>
@@ -64,19 +64,20 @@
           <p class="hero-message stagger">“See you on our special day”</p>
           <div class="hero-actions stagger">
             <a class="button primary" href="#events">Open invitation</a>
-            <button class="button ghost" id="addBothCalendar" type="button">Add both dates</button>
+            <button class="button ghost" id="addBothCalendar" data-calendar="both" type="button">Add both dates</button>
           </div>
         </div>
 
         <div class="photo-stage" aria-label="Rotating globe of Helen and Ian photos">
           <div class="globe-halo" aria-hidden="true"></div>
-          <div class="globe-wrap" data-parallax="-0.04">
+          <div class="globe-wrap">
             <div class="globe-meridians" aria-hidden="true">
-              <i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i>
             </div>
+            <div class="globe-orbit" aria-hidden="true"></div>
             <div class="globe" id="photoGlobe">
-              <figure class="globe-face" style="--i: 0">
-                <img src="public/assets/photo-30.webp" alt="Helen and Ian smiling together" width="600" height="800" />
+              <figure class="globe-face" style="--rot: 0deg; --lat: 0deg; --size: 30%">
+                <img src="public/assets/photo-30.webp" alt="Helen and Ian together" width="600" height="800" />
               </figure>
             </div>
           </div>
@@ -92,18 +93,34 @@
     </header>
 
     <main>
-      <section class="section intro reveal">
-        <p class="kicker">White · Burgundy · Green</p>
-        <h2>One invitation, two beautiful chapters.</h2>
-        <p>
-          Join Helen &amp; Ian for their Kuhingira in Mbarara and their Wedding celebration in Kabale in the same joyful week.
-        </p>
+      <section class="section invitation-letter" id="invitation">
+        <article class="letter-card reveal">
+          <span class="letter-corner tl" aria-hidden="true"></span>
+          <span class="letter-corner tr" aria-hidden="true"></span>
+          <span class="letter-corner bl" aria-hidden="true"></span>
+          <span class="letter-corner br" aria-hidden="true"></span>
+          <p class="kicker">The invitation</p>
+          <p class="letter-lead">Together with their families,</p>
+          <h2 class="letter-couple">Helen <span>&amp;</span> Ian</h2>
+          <p class="letter-body">
+            request the pleasure of your company as they begin their life together — first at their
+            <strong>Kuhingira</strong> in Nkokonjeru, Mbarara on Thursday 26 November 2026, and then at their
+            <strong>Wedding</strong> at St Peter’s Cathedral, Rugarama, Kabale on Saturday 28 November 2026,
+            followed by the reception at Kabale Golf Course.
+          </p>
+          <p class="letter-quote">“See you on our special day”</p>
+          <div class="letter-actions">
+            <button class="button primary" data-calendar="both" type="button">Add both dates to my calendar</button>
+            <a class="button ghost" href="#rsvp">RSVP</a>
+          </div>
+        </article>
       </section>
 
       <section class="section event-section" id="events">
         <div class="section-heading reveal">
-          <p class="kicker">Tap each card</p>
-          <h2>Celebration cards</h2>
+          <p class="kicker">Tap each card to turn it over</p>
+          <h2>The two celebrations</h2>
+          <p class="section-note">Both days are part of the same invitation — you are warmly welcome to each.</p>
         </div>
 
         <div class="event-cards">
@@ -120,7 +137,7 @@
                 <h3>Late B. Nyakapanka’s Residence</h3>
                 <p>Nkokonjeru, Mbarara</p>
                 <p class="quote">“See you on our special day”</p>
-                <button class="mini-button calendar-event" data-event="kuhingira" type="button">Add Kuhingira</button>
+                <button class="mini-button" data-calendar="kuhingira" type="button">Add to calendar</button>
               </div>
             </div>
           </article>
@@ -138,7 +155,7 @@
                 <h3>St Peter’s Cathedral</h3>
                 <p>Rugarama, Kabale, Uganda</p>
                 <p><strong>Reception:</strong> Kabale Golf Course</p>
-                <button class="mini-button calendar-event" data-event="wedding" type="button">Add Wedding</button>
+                <button class="mini-button" data-calendar="wedding" type="button">Add to calendar</button>
               </div>
             </div>
           </article>
@@ -148,7 +165,7 @@
       <section class="section timeline-section" id="timeline">
         <div class="section-heading reveal">
           <p class="kicker">The week of love</p>
-          <h2>Timeline</h2>
+          <h2>How the week unfolds</h2>
         </div>
         <div class="timeline">
           <article class="timeline-item reveal">
@@ -169,10 +186,49 @@
         </div>
       </section>
 
-      <section class="section gallery-section" id="gallery">
+      <section class="section places-section" id="places">
         <div class="section-heading reveal">
-          <p class="kicker">Moments</p>
-          <h2>Animated memory gallery</h2>
+          <p class="kicker">Where to find us</p>
+          <h2>The places</h2>
+        </div>
+        <div class="place-grid">
+          <article class="place-card reveal">
+            <p class="event-label">26 November 2026</p>
+            <h3>Kuhingira</h3>
+            <p>Late B. Nyakapanka’s Residence</p>
+            <p class="muted">Nkokonjeru, Mbarara</p>
+            <a class="mini-button" href="https://www.google.com/maps/search/?api=1&amp;query=Nkokonjeru%2C%20Mbarara%2C%20Uganda" target="_blank" rel="noreferrer">Open in Maps</a>
+          </article>
+          <article class="place-card reveal">
+            <p class="event-label">28 November 2026</p>
+            <h3>Wedding ceremony</h3>
+            <p>St Peter’s Cathedral, Rugarama</p>
+            <p class="muted">Kabale, Uganda</p>
+            <a class="mini-button" href="https://www.google.com/maps/search/?api=1&amp;query=St%20Peter%27s%20Cathedral%20Rugarama%20Kabale%20Uganda" target="_blank" rel="noreferrer">Open in Maps</a>
+          </article>
+          <article class="place-card reveal">
+            <p class="event-label">28 November 2026</p>
+            <h3>Reception</h3>
+            <p>Kabale Golf Course</p>
+            <p class="muted">Kabale, Uganda</p>
+            <a class="mini-button" href="https://www.google.com/maps/search/?api=1&amp;query=Kabale%20Golf%20Course%2C%20Kabale%2C%20Uganda" target="_blank" rel="noreferrer">Open in Maps</a>
+          </article>
+        </div>
+        <div class="palette reveal" aria-label="Our colours">
+          <p class="kicker">Our colours</p>
+          <ul>
+            <li><span class="swatch white"></span>White</li>
+            <li><span class="swatch burgundy"></span>Burgundy</li>
+            <li><span class="swatch green"></span>Green</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section gallery-section" id="story">
+        <div class="section-heading reveal">
+          <p class="kicker">Helen &amp; Ian</p>
+          <h2>Our story in photos</h2>
+          <p class="section-note">Every picture here is a step on the way to 26 and 28 November 2026.</p>
         </div>
         <div class="marquee reveal" aria-label="Photo film strip">
           <div class="marquee-track" id="marqueeTrack"></div>
@@ -183,10 +239,10 @@
         <div class="gallery-grid" id="galleryGrid" aria-label="Helen and Ian photo gallery"></div>
       </section>
 
-      <section class="section video-section reveal" aria-label="Video moments">
+      <section class="section video-section reveal" aria-label="Video clips">
         <div>
-          <p class="kicker">Motion moments</p>
-          <h2>Celebration clips</h2>
+          <p class="kicker">In motion</p>
+          <h2>Our story in motion</h2>
         </div>
         <div class="video-grid">
           <video src="public/assets/moment-01.mp4" muted loop playsinline preload="none" data-lazy-video></video>
@@ -198,6 +254,7 @@
         <div class="rsvp-card reveal">
           <p class="kicker">RSVP</p>
           <h2>Kindly confirm with Beckie Rwanika White</h2>
+          <p class="rsvp-note">A quick message or call is all it takes — it helps Helen &amp; Ian plan a seat for you at both celebrations.</p>
           <div class="rsvp-actions">
             <a class="button primary" href="https://wa.me/256747084996?text=Hello%20Beckie%2C%20I%20am%20RSVPing%20for%20Helen%20%26%20Ian%27s%20Kuhingira%20and%20Wedding." target="_blank" rel="noreferrer">WhatsApp Uganda</a>
             <a class="button ghost" href="https://wa.me/447851026329?text=Hello%20Beckie%2C%20I%20am%20RSVPing%20for%20Helen%20%26%20Ian%27s%20Kuhingira%20and%20Wedding." target="_blank" rel="noreferrer">WhatsApp UK</a>
@@ -209,9 +266,20 @@
     </main>
 
     <footer class="footer">
+      <p class="footer-quote">“See you on our special day”</p>
       <p>Helen &amp; Ian · Kuhingira 26 Nov 2026 · Wedding 28 Nov 2026</p>
       <a href="#top">Back to top</a>
     </footer>
+
+    <div class="cal-sheet" id="calSheet" hidden>
+      <div class="cal-panel" role="dialog" aria-modal="true" aria-label="Add to calendar">
+        <button class="cal-close" id="calClose" type="button" aria-label="Close">&times;</button>
+        <p class="kicker">Add to calendar</p>
+        <h3 id="calTitle">Helen &amp; Ian</h3>
+        <div class="cal-options" id="calOptions"></div>
+        <p class="cal-note">Google and Outlook open in your account and save straight to your online calendar. iPhone and other calendars use the Apple option.</p>
+      </div>
+    </div>
 
     <div class="lightbox" id="lightbox" hidden>
       <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close photo">&times;</button>

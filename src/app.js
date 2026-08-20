@@ -1,15 +1,25 @@
 const events = {
   kuhingira: {
+    label: 'Kuhingira · 26 November 2026',
     title: 'Helen & Ian Kuhingira',
     start: '20261126T120000',
     end: '20261126T180000',
+    startUtc: '20261126T090000Z',
+    endUtc: '20261126T150000Z',
+    startIso: '2026-11-26T12:00:00+03:00',
+    endIso: '2026-11-26T18:00:00+03:00',
     location: 'Late B. Nyakapanka’s Residence, Nkokonjeru, Mbarara',
     details: 'Helen & Ian Kuhingira. See you on our special day.'
   },
   wedding: {
+    label: 'Wedding & Reception · 28 November 2026',
     title: 'Helen & Ian Wedding',
     start: '20261128T100000',
     end: '20261128T180000',
+    startUtc: '20261128T070000Z',
+    endUtc: '20261128T150000Z',
+    startIso: '2026-11-28T10:00:00+03:00',
+    endIso: '2026-11-28T18:00:00+03:00',
     location: 'St Peter’s Cathedral, Rugarama, Kabale, Uganda; Reception at Kabale Golf Course',
     details: 'Helen & Ian Wedding Ceremony at St Peter’s Cathedral, followed by reception at Kabale Golf Course. RSVP: Beckie Rwanika White.'
   }
@@ -101,17 +111,108 @@ function downloadCalendar(selectedEvents, filename) {
   link.remove();
 }
 
+function googleUrl(event) {
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: event.title,
+    dates: `${event.startUtc}/${event.endUtc}`,
+    details: event.details,
+    location: event.location
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+function outlookUrl(event) {
+  const params = new URLSearchParams({
+    path: '/calendar/action/compose',
+    rru: 'addevent',
+    subject: event.title,
+    startdt: event.startIso,
+    enddt: event.endIso,
+    body: event.details,
+    location: event.location
+  });
+  return `https://outlook.live.com/calendar/0/deeplink/compose?${params.toString()}`;
+}
+
+function yahooUrl(event) {
+  const params = new URLSearchParams({
+    v: '60',
+    title: event.title,
+    st: event.startUtc,
+    et: event.endUtc,
+    desc: event.details,
+    in_loc: event.location
+  });
+  return `https://calendar.yahoo.com/?${params.toString()}`;
+}
+
+function calendarOptions(keys) {
+  const rows = [];
+  keys.forEach((key) => {
+    const event = events[key];
+    if (keys.length > 1) rows.push(`<p class="cal-group">${event.label}</p>`);
+    rows.push(`
+      <a class="cal-option google" href="${googleUrl(event)}" target="_blank" rel="noreferrer">Google Calendar</a>
+      <a class="cal-option outlook" href="${outlookUrl(event)}" target="_blank" rel="noreferrer">Outlook / Microsoft 365</a>
+      <a class="cal-option yahoo" href="${yahooUrl(event)}" target="_blank" rel="noreferrer">Yahoo Calendar</a>
+    `);
+  });
+  const file = keys.length > 1 ? 'both' : keys[0];
+  rows.push(`<button class="cal-option apple" type="button" data-ics="${file}">iPhone, Apple or other calendar</button>`);
+  return rows.join('');
+}
+
 function wireCalendarButtons() {
-  document.querySelector('#addBothCalendar')?.addEventListener('click', () => {
-    downloadCalendar([events.kuhingira, events.wedding], 'helen-ian-kuhingira-wedding.ics');
+  const sheet = document.querySelector('#calSheet');
+  const panel = document.querySelector('#calOptions');
+  const title = document.querySelector('#calTitle');
+  const close = document.querySelector('#calClose');
+  if (!sheet || !panel || !title || !close) return;
+
+  const hide = () => {
+    sheet.classList.remove('is-open');
+    window.setTimeout(() => {
+      sheet.hidden = true;
+    }, 280);
+  };
+
+  const show = (keys) => {
+    title.textContent = keys.length > 1
+      ? 'Kuhingira & Wedding · 26 and 28 November 2026'
+      : events[keys[0]].label;
+    panel.innerHTML = calendarOptions(keys);
+    sheet.hidden = false;
+    requestAnimationFrame(() => sheet.classList.add('is-open'));
+  };
+
+  document.querySelectorAll('[data-calendar]').forEach((button) => {
+    button.addEventListener('click', (clickEvent) => {
+      clickEvent.stopPropagation();
+      const target = button.dataset.calendar;
+      show(target === 'both' ? ['kuhingira', 'wedding'] : [target]);
+    });
   });
 
-  document.querySelectorAll('.calendar-event').forEach((button) => {
-    button.addEventListener('click', (event) => {
-      event.stopPropagation();
-      const key = button.dataset.event;
-      downloadCalendar([events[key]], `helen-ian-${key}.ics`);
-    });
+  panel.addEventListener('click', (clickEvent) => {
+    const trigger = clickEvent.target.closest('[data-ics]');
+    if (trigger) {
+      const key = trigger.dataset.ics;
+      if (key === 'both') {
+        downloadCalendar([events.kuhingira, events.wedding], 'helen-ian-kuhingira-wedding.ics');
+      } else {
+        downloadCalendar([events[key]], `helen-ian-${key}.ics`);
+      }
+    }
+    if (trigger || clickEvent.target.closest('a')) hide();
+  });
+
+  close.addEventListener('click', hide);
+  sheet.addEventListener('click', (clickEvent) => {
+    if (clickEvent.target === sheet) hide();
+  });
+  document.addEventListener('keydown', (clickEvent) => {
+    if (clickEvent.key === 'Escape' && !sheet.hidden) hide();
   });
 }
 
@@ -219,9 +320,13 @@ function wireTilt() {
 
 /* ---------- scroll driven motion ---------- */
 
+const isSmallScreen = window.matchMedia('(max-width: 900px)').matches;
+
 function wireScrollMotion() {
   const bar = document.querySelector('.scroll-progress span');
-  const parallaxNodes = reduceMotion ? [] : [...document.querySelectorAll('[data-parallax]')];
+  const parallaxNodes = reduceMotion || isSmallScreen
+    ? []
+    : [...document.querySelectorAll('[data-parallax]')];
   let frame = 0;
 
   const onScroll = () => {
@@ -324,18 +429,31 @@ function wireLightbox() {
   });
 }
 
+const globeRings = [
+  { lat: 34, count: 5, size: 22, offset: 36 },
+  { lat: 0, count: 7, size: 29, offset: 0 },
+  { lat: -34, count: 5, size: 22, offset: 36 }
+];
+
 function renderGlobe(photos) {
   const globe = document.querySelector('#photoGlobe');
-  if (!globe) return;
-  const faces = photos.slice(0, 12);
-  globe.style.setProperty('--count', String(faces.length));
-  globe.innerHTML = faces
-    .map((photo, index) => `
-      <figure class="globe-face" style="--i: ${index}">
-        <img src="public/${photo.src}" alt="Helen and Ian memory ${index + 1}" loading="lazy" decoding="async">
-      </figure>
-    `)
-    .join('');
+  if (!globe || !photos.length) return;
+
+  let index = 0;
+  const faces = [];
+  globeRings.forEach((ring) => {
+    for (let slot = 0; slot < ring.count; slot += 1) {
+      const photo = photos[index % photos.length];
+      index += 1;
+      const rot = ring.offset + (slot * 360) / ring.count;
+      faces.push(`
+        <figure class="globe-face" style="--rot: ${rot.toFixed(2)}deg; --lat: ${ring.lat}deg; --size: ${ring.size}%">
+          <img src="public/${photo.src}" alt="Helen and Ian" loading="lazy" decoding="async">
+        </figure>
+      `);
+    }
+  });
+  globe.innerHTML = faces.join('');
 }
 
 async function renderGallery() {
@@ -347,7 +465,7 @@ async function renderGallery() {
   const galleryGrid = document.querySelector('#galleryGrid');
 
   const strip = (list) => [...list, ...list]
-    .map((photo, index) => `<img src="public/${photo.src}" alt="Helen and Ian memory ${index + 1}" loading="lazy" decoding="async">`)
+    .map((photo) => `<img src="public/${photo.src}" alt="Helen and Ian" loading="lazy" decoding="async">`)
     .join('');
 
   if (trackOne) trackOne.innerHTML = strip(photos.slice(0, 14));
@@ -356,7 +474,7 @@ async function renderGallery() {
   galleryGrid.innerHTML = photos
     .map((photo, index) => `
       <figure class="gallery-item reveal" data-delay="${index % 5}">
-        <img src="public/${photo.src}" alt="Helen and Ian memory ${index + 1}" loading="lazy" decoding="async">
+        <img src="public/${photo.src}" alt="Helen and Ian, photo ${index + 1}" loading="lazy" decoding="async">
       </figure>
     `)
     .join('');
@@ -369,7 +487,8 @@ async function renderGallery() {
 function addPetals() {
   const host = document.querySelector('.petals');
   if (!host || reduceMotion) return;
-  const count = window.innerWidth < 700 ? 8 : 14;
+  if (isSmallScreen && window.matchMedia('(hover: none)').matches) return;
+  const count = window.innerWidth < 700 ? 6 : 14;
   const fragment = document.createDocumentFragment();
   for (let index = 0; index < count; index += 1) {
     const petal = document.createElement('span');
