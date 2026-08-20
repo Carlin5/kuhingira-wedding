@@ -15,8 +15,13 @@ const events = {
   }
 };
 
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const countdownTarget = new Date('2026-11-26T12:00:00+03:00').getTime();
+
+/* ---------- countdown ---------- */
+
 const unitNodes = document.querySelectorAll('[data-unit]');
+const lastValues = new Map();
 
 function updateCountdown() {
   const diff = Math.max(0, countdownTarget - Date.now());
@@ -30,9 +35,18 @@ function updateCountdown() {
 
   unitNodes.forEach((node) => {
     const unit = node.dataset.unit;
-    node.textContent = values[unit].toLocaleString('en-GB', { minimumIntegerDigits: unit === 'days' ? 1 : 2 });
+    const text = String(values[unit]).padStart(unit === 'days' ? 1 : 2, '0');
+    if (lastValues.get(unit) === text) return;
+    lastValues.set(unit, text);
+    node.textContent = text;
+    if (reduceMotion) return;
+    node.classList.remove('tick');
+    void node.offsetWidth;
+    node.classList.add('tick');
   });
 }
+
+/* ---------- calendar ---------- */
 
 function escapeIcs(value) {
   return value
@@ -101,6 +115,71 @@ function wireCalendarButtons() {
   });
 }
 
+/* ---------- envelope intro ---------- */
+
+function splitHeroName() {
+  const heading = document.querySelector('[data-letters]');
+  if (!heading) return;
+  const walk = (node) => {
+    [...node.childNodes].forEach((child) => {
+      if (child.nodeType === Node.TEXT_NODE) {
+        const fragment = document.createDocumentFragment();
+        [...child.textContent].forEach((character) => {
+          const span = document.createElement('span');
+          span.className = 'letter';
+          span.textContent = character === ' ' ? '\u00a0' : character;
+          fragment.appendChild(span);
+        });
+        child.replaceWith(fragment);
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        walk(child);
+      }
+    });
+  };
+  walk(heading);
+  heading.querySelectorAll('.letter').forEach((letter, index) => {
+    letter.style.transitionDelay = `${index * 45}ms`;
+  });
+}
+
+function playHeroIntro() {
+  document.querySelector('.hero-name')?.classList.add('is-in');
+  document.querySelectorAll('.hero-copy .stagger').forEach((node, index) => {
+    node.style.transitionDelay = `${420 + index * 130}ms`;
+    node.classList.add('is-in');
+  });
+}
+
+function wireEnvelope() {
+  const envelope = document.querySelector('#envelope');
+  const stage = document.querySelector('#envelopeStage');
+  if (!envelope || !stage) return;
+
+  let opened = false;
+  const open = () => {
+    if (opened) return;
+    opened = true;
+    envelope.classList.add('is-opening');
+    envelope.setAttribute('aria-expanded', 'true');
+    const liftDelay = reduceMotion ? 0 : 620;
+    const revealDelay = reduceMotion ? 0 : 1650;
+
+    window.setTimeout(() => envelope.classList.add('is-lifting'), liftDelay);
+    window.setTimeout(() => {
+      document.body.classList.remove('is-sealed');
+      playHeroIntro();
+      window.setTimeout(() => stage.setAttribute('aria-hidden', 'true'), 900);
+    }, revealDelay);
+  };
+
+  envelope.addEventListener('click', open);
+  stage.addEventListener('click', (event) => {
+    if (event.target === stage) open();
+  });
+}
+
+/* ---------- flip cards + tilt ---------- */
+
 function wireFlipCards() {
   document.querySelectorAll('.flip-card').forEach((card) => {
     card.addEventListener('click', () => card.classList.toggle('is-flipped'));
@@ -113,21 +192,154 @@ function wireFlipCards() {
   });
 }
 
+function wireTilt() {
+  if (reduceMotion || window.matchMedia('(hover: none)').matches) return;
+  document.querySelectorAll('.tilt').forEach((card) => {
+    let frame = 0;
+    const apply = (event) => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        card.style.setProperty('--tilt-y', `${x * 12}deg`);
+        card.style.setProperty('--tilt-x', `${-y * 10}deg`);
+      });
+    };
+    card.addEventListener('pointermove', apply);
+    card.addEventListener('pointerleave', () => {
+      card.style.setProperty('--tilt-y', '0deg');
+      card.style.setProperty('--tilt-x', '0deg');
+    });
+  });
+}
+
+/* ---------- scroll driven motion ---------- */
+
+function wireScrollMotion() {
+  const bar = document.querySelector('.scroll-progress span');
+  const parallaxNodes = reduceMotion ? [] : [...document.querySelectorAll('[data-parallax]')];
+  let frame = 0;
+
+  const onScroll = () => {
+    if (frame) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      const scrolled = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (bar) bar.style.transform = `scaleX(${max > 0 ? Math.min(1, scrolled / max) : 0})`;
+      parallaxNodes.forEach((node) => {
+        node.style.translate = `0 ${(scrolled * Number(node.dataset.parallax)).toFixed(1)}px`;
+      });
+    });
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+/* ---------- reveals ---------- */
+
+let revealObserver;
+function observeReveals() {
+  revealObserver?.disconnect();
+  revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+  document.querySelectorAll('.reveal:not(.is-visible)').forEach((element) => {
+    const delay = element.dataset.delay;
+    if (delay) element.style.transitionDelay = `${Number(delay) * 70}ms`;
+    revealObserver.observe(element);
+  });
+}
+
+function observeTimeline() {
+  const timeline = document.querySelector('.timeline');
+  if (!timeline) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      timeline.classList.add('is-drawn');
+      observer.disconnect();
+    });
+  }, { threshold: 0.2 });
+  observer.observe(timeline);
+}
+
+function observeVideos() {
+  const videos = [...document.querySelectorAll('[data-lazy-video]')];
+  if (!videos.length) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        video.preload = 'auto';
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, { threshold: 0.25 });
+  videos.forEach((video) => observer.observe(video));
+}
+
+/* ---------- gallery ---------- */
+
+function wireLightbox() {
+  const lightbox = document.querySelector('#lightbox');
+  const image = document.querySelector('#lightboxImage');
+  const close = document.querySelector('#lightboxClose');
+  if (!lightbox || !image || !close) return;
+
+  const hide = () => {
+    lightbox.classList.remove('is-open');
+    window.setTimeout(() => {
+      lightbox.hidden = true;
+      image.removeAttribute('src');
+    }, 320);
+  };
+
+  document.querySelector('#galleryGrid')?.addEventListener('click', (event) => {
+    const picture = event.target.closest('.gallery-item img');
+    if (!picture) return;
+    image.src = picture.src;
+    lightbox.hidden = false;
+    requestAnimationFrame(() => lightbox.classList.add('is-open'));
+  });
+
+  close.addEventListener('click', hide);
+  lightbox.addEventListener('click', (event) => {
+    if (event.target === lightbox) hide();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !lightbox.hidden) hide();
+  });
+}
+
 async function renderGallery() {
   const response = await fetch('public/assets/manifest.json');
   const { photos } = await response.json();
-  const marqueeTrack = document.querySelector('#marqueeTrack');
+  const trackOne = document.querySelector('#marqueeTrack');
+  const trackTwo = document.querySelector('#marqueeTrackTwo');
   const galleryGrid = document.querySelector('#galleryGrid');
 
-  const marqueePhotos = [...photos.slice(0, 16), ...photos.slice(0, 16)];
-  marqueeTrack.innerHTML = marqueePhotos
-    .map((photo, index) => `<img src="public/${photo.src}" alt="Helen and Ian memory ${index + 1}" loading="lazy">`)
+  const strip = (list) => [...list, ...list]
+    .map((photo, index) => `<img src="public/${photo.src}" alt="Helen and Ian memory ${index + 1}" loading="lazy" decoding="async">`)
     .join('');
+
+  if (trackOne) trackOne.innerHTML = strip(photos.slice(0, 14));
+  if (trackTwo) trackTwo.innerHTML = strip(photos.slice(14, 28));
 
   galleryGrid.innerHTML = photos
     .map((photo, index) => `
-      <figure class="gallery-item reveal" style="--delay:${index % 6}">
-        <img src="public/${photo.src}" alt="Helen and Ian memory ${index + 1}" loading="lazy">
+      <figure class="gallery-item reveal" data-delay="${index % 5}">
+        <img src="public/${photo.src}" alt="Helen and Ian memory ${index + 1}" loading="lazy" decoding="async">
       </figure>
     `)
     .join('');
@@ -135,45 +347,48 @@ async function renderGallery() {
   observeReveals();
 }
 
-let revealObserver;
-function observeReveals() {
-  revealObserver?.disconnect();
-  revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.16 });
+/* ---------- petals ---------- */
 
-  document.querySelectorAll('.reveal:not(.is-visible)').forEach((element) => {
-    element.style.transitionDelay = element.style.getPropertyValue('--delay') ? `${Number(element.style.getPropertyValue('--delay')) * 70}ms` : '';
-    revealObserver.observe(element);
-  });
-}
-
-function addPetalElements() {
+function addPetals() {
   const host = document.querySelector('.petals');
-  if (!host) return;
-  for (let index = 0; index < 18; index += 1) {
+  if (!host || reduceMotion) return;
+  const count = window.innerWidth < 700 ? 8 : 14;
+  const fragment = document.createDocumentFragment();
+  for (let index = 0; index < count; index += 1) {
     const petal = document.createElement('span');
-    petal.style.left = `${Math.random() * 100}%`;
-    petal.style.animationDelay = `${Math.random() * -18}s`;
-    petal.style.animationDuration = `${12 + Math.random() * 16}s`;
-    host.appendChild(petal);
+    petal.style.left = `${(index / count) * 100 + Math.random() * 6}%`;
+    petal.style.animationDelay = `${Math.random() * -20}s`;
+    petal.style.animationDuration = `${16 + Math.random() * 14}s`;
+    fragment.appendChild(petal);
   }
+  host.appendChild(fragment);
 }
+
+/* ---------- init ---------- */
 
 function init() {
+  splitHeroName();
   updateCountdown();
   setInterval(updateCountdown, 1000);
   wireCalendarButtons();
+  wireEnvelope();
   wireFlipCards();
-  addPetalElements();
+  wireTilt();
+  wireScrollMotion();
+  wireLightbox();
+  observeTimeline();
+  observeVideos();
+  addPetals();
   observeReveals();
+
+  if (reduceMotion) {
+    document.body.classList.remove('is-sealed');
+    playHeroIntro();
+  }
+
   renderGallery().catch(() => {
-    document.querySelector('#galleryGrid').innerHTML = '<p>Photos are loading. Please refresh if they do not appear.</p>';
+    const grid = document.querySelector('#galleryGrid');
+    if (grid) grid.innerHTML = '<p>Photos are loading. Please refresh if they do not appear.</p>';
   });
 }
 

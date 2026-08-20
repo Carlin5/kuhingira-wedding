@@ -11,12 +11,33 @@
     <meta property="og:image" content="public/assets/photo-30.webp" />
     <title>Helen & Ian — Kuhingira & Wedding</title>
     <link rel="preload" href="src/styles.css" as="style" />
+    <link rel="preload" href="public/assets/photo-30.webp" as="image" />
     <link rel="stylesheet" href="src/styles.css" />
   </head>
-  <body>
-    <div class="aurora" aria-hidden="true"></div>
-    <div class="grain" aria-hidden="true"></div>
+  <body class="is-sealed">
+    <div class="glow" aria-hidden="true"></div>
     <div class="petals" aria-hidden="true"></div>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+
+    <div class="envelope-stage" id="envelopeStage">
+      <div class="envelope-scene">
+        <button class="envelope" id="envelope" type="button" aria-label="Tap to open the invitation from Helen and Ian">
+          <span class="envelope-back"></span>
+          <span class="envelope-letter">
+            <span class="letter-inner">
+              <span class="letter-monogram">H <em>&</em> I</span>
+              <span class="letter-title">Helen &amp; Ian</span>
+              <span class="letter-line">Kuhingira &amp; Wedding</span>
+              <span class="letter-dates">26 &amp; 28 November 2026</span>
+            </span>
+          </span>
+          <span class="envelope-body"></span>
+          <span class="envelope-flap"></span>
+          <span class="envelope-seal"><em>H&amp;I</em></span>
+          <span class="envelope-hint">Tap to open</span>
+        </button>
+      </div>
+    </div>
 
     <header class="hero" id="top">
       <nav class="nav" aria-label="Invitation navigation">
@@ -30,36 +51,36 @@
       </nav>
 
       <section class="hero-grid">
-        <div class="hero-copy reveal">
-          <p class="eyebrow">A two-day celebration</p>
-          <h1>Helen <span>&</span> Ian</h1>
-          <p class="hero-subtitle">Kuhingira & Wedding Invitation</p>
-          <p class="hero-message">“See you on our special day”</p>
-          <div class="hero-actions">
+        <div class="hero-copy">
+          <p class="eyebrow stagger">A two-day celebration</p>
+          <h1 class="hero-name" data-letters>Helen <span class="amp">&</span> Ian</h1>
+          <p class="hero-subtitle stagger">Kuhingira &amp; Wedding Invitation</p>
+          <p class="hero-message stagger">“See you on our special day”</p>
+          <div class="hero-actions stagger">
             <a class="button primary" href="#events">Open invitation</a>
             <button class="button ghost" id="addBothCalendar" type="button">Add both dates</button>
           </div>
         </div>
 
-        <div class="photo-stage reveal" aria-label="Animated couple photo showcase">
-          <div class="orbit-ring"></div>
-          <figure class="hero-card hero-card-main">
-            <img src="public/assets/photo-30.webp" alt="Helen and Ian smiling together" />
+        <div class="photo-stage" aria-label="Animated couple photo showcase">
+          <div class="orbit-ring" data-parallax="0.05"></div>
+          <figure class="hero-card hero-card-main" data-parallax="-0.06">
+            <img src="public/assets/photo-30.webp" alt="Helen and Ian smiling together" width="900" height="1200" />
           </figure>
-          <figure class="hero-card hero-card-side one">
-            <img src="public/assets/photo-18.webp" alt="Helen and Ian during an outing" />
+          <figure class="hero-card hero-card-side one" data-parallax="0.12">
+            <img src="public/assets/photo-18.webp" alt="Helen and Ian during an outing" width="600" height="800" loading="lazy" />
           </figure>
-          <figure class="hero-card hero-card-side two">
-            <img src="public/assets/photo-07.webp" alt="Helen and Ian seated together" />
+          <figure class="hero-card hero-card-side two" data-parallax="0.18">
+            <img src="public/assets/photo-07.webp" alt="Helen and Ian seated together" width="600" height="800" loading="lazy" />
           </figure>
         </div>
       </section>
 
       <div class="countdown reveal" id="countdown" aria-label="Countdown to Kuhingira">
         <div><strong data-unit="days">0</strong><span>Days</span></div>
-        <div><strong data-unit="hours">0</strong><span>Hours</span></div>
-        <div><strong data-unit="minutes">0</strong><span>Minutes</span></div>
-        <div><strong data-unit="seconds">0</strong><span>Seconds</span></div>
+        <div><strong data-unit="hours">00</strong><span>Hours</span></div>
+        <div><strong data-unit="minutes">00</strong><span>Minutes</span></div>
+        <div><strong data-unit="seconds">00</strong><span>Seconds</span></div>
       </div>
     </header>
 
@@ -68,7 +89,7 @@
         <p class="kicker">White · Burgundy · Green</p>
         <h2>One invitation, two beautiful chapters.</h2>
         <p>
-          Join Helen & Ian for their Kuhingira in Mbarara and their Wedding celebration in Kabale in the same joyful week.
+          Join Helen &amp; Ian for their Kuhingira in Mbarara and their Wedding celebration in Kabale in the same joyful week.
         </p>
       </section>
 
@@ -79,12 +100,12 @@
         </div>
 
         <div class="event-cards">
-          <article class="flip-card reveal" tabindex="0" aria-label="Kuhingira invitation card">
+          <article class="flip-card reveal tilt" tabindex="0" aria-label="Kuhingira invitation card">
             <div class="flip-inner">
               <div class="flip-face front kuhingira-card">
                 <p class="event-label">26 November 2026</p>
                 <h3>Kuhingira</h3>
-                <p>Helen & Ian</p>
+                <p>Helen &amp; Ian</p>
                 <span>Tap to reveal</span>
               </div>
               <div class="flip-face back">
@@ -97,12 +118,12 @@
             </div>
           </article>
 
-          <article class="flip-card reveal" tabindex="0" aria-label="Wedding invitation card">
+          <article class="flip-card reveal tilt" tabindex="0" aria-label="Wedding invitation card">
             <div class="flip-inner">
               <div class="flip-face front wedding-card">
                 <p class="event-label">28 November 2026</p>
                 <h3>Wedding</h3>
-                <p>Helen & Ian</p>
+                <p>Helen &amp; Ian</p>
                 <span>Tap to reveal</span>
               </div>
               <div class="flip-face back">
@@ -149,6 +170,9 @@
         <div class="marquee reveal" aria-label="Photo film strip">
           <div class="marquee-track" id="marqueeTrack"></div>
         </div>
+        <div class="marquee reverse reveal" aria-hidden="true">
+          <div class="marquee-track" id="marqueeTrackTwo"></div>
+        </div>
         <div class="gallery-grid" id="galleryGrid" aria-label="Helen and Ian photo gallery"></div>
       </section>
 
@@ -158,8 +182,8 @@
           <h2>Celebration clips</h2>
         </div>
         <div class="video-grid">
-          <video src="public/assets/moment-01.mp4" autoplay muted loop playsinline></video>
-          <video src="public/assets/moment-02.mp4" autoplay muted loop playsinline></video>
+          <video src="public/assets/moment-01.mp4" muted loop playsinline preload="none" data-lazy-video></video>
+          <video src="public/assets/moment-02.mp4" muted loop playsinline preload="none" data-lazy-video></video>
         </div>
       </section>
 
@@ -178,9 +202,14 @@
     </main>
 
     <footer class="footer">
-      <p>Helen & Ian · Kuhingira 26 Nov 2026 · Wedding 28 Nov 2026</p>
+      <p>Helen &amp; Ian · Kuhingira 26 Nov 2026 · Wedding 28 Nov 2026</p>
       <a href="#top">Back to top</a>
     </footer>
+
+    <div class="lightbox" id="lightbox" hidden>
+      <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close photo">&times;</button>
+      <img id="lightboxImage" alt="Helen and Ian photo" />
+    </div>
 
     <script src="src/app.js" type="module"></script>
   </body>
