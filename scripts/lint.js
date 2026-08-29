@@ -13,9 +13,14 @@ const requiredCopy = [
   'Kuhingira',
   'St Peter’s Cathedral',
   'Kabale Golf Course',
-  'Beckie Rwanika White',
-  '+256747084996',
-  '+447851026329'
+  'Jeniffer Muzarirehe',
+  'Arinaitwe Humphrey Twiine',
+  'Elizabeth Nyakapanka',
+  'Solomon Ondoma',
+  '+447983873505',
+  '+256702486480',
+  '+447903904766',
+  '+16083357565'
 ];
 
 for (const file of requiredFiles) {

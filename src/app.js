@@ -21,7 +21,7 @@ const events = {
     startIso: '2026-11-28T10:00:00+03:00',
     endIso: '2026-11-28T18:00:00+03:00',
     location: 'St Peter’s Cathedral, Rugarama, Kabale, Uganda; Reception at Kabale Golf Course',
-    details: 'Helen & Ian Wedding Ceremony at St Peter’s Cathedral, followed by reception at Kabale Golf Course. RSVP: Beckie Rwanika White.'
+    details: 'Helen & Ian Wedding Ceremony at St Peter’s Cathedral, followed by reception at Kabale Golf Course. RSVP: Arinaitwe Humphrey Twiine +256702486480.'
   }
 };
 
@@ -429,37 +429,35 @@ function wireLightbox() {
   });
 }
 
-const globeRings = [
-  { lat: 34, count: 5, size: 22, offset: 36 },
-  { lat: 0, count: 7, size: 29, offset: 0 },
-  { lat: -34, count: 5, size: 22, offset: 36 }
-];
+function renderHeroSlideshow(photos) {
+  const host = document.querySelector('#archSlides');
+  if (!host || !photos.length) return;
 
-function renderGlobe(photos) {
-  const globe = document.querySelector('#photoGlobe');
-  if (!globe || !photos.length) return;
+  const picks = photos.slice(0, 8);
+  host.innerHTML = picks
+    .map(
+      (photo, i) => `
+        <img class="arch-slide${i === 0 ? ' is-active' : ''}" src="public/${photo.src}"
+          alt="Helen and Ian" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async">
+      `
+    )
+    .join('');
 
-  let index = 0;
-  const faces = [];
-  globeRings.forEach((ring) => {
-    for (let slot = 0; slot < ring.count; slot += 1) {
-      const photo = photos[index % photos.length];
-      index += 1;
-      const rot = ring.offset + (slot * 360) / ring.count;
-      faces.push(`
-        <figure class="globe-face" style="--rot: ${rot.toFixed(2)}deg; --lat: ${ring.lat}deg; --size: ${ring.size}%">
-          <img src="public/${photo.src}" alt="Helen and Ian" loading="lazy" decoding="async">
-        </figure>
-      `);
-    }
-  });
-  globe.innerHTML = faces.join('');
+  if (reduceMotion || picks.length < 2) return;
+
+  const slides = [...host.querySelectorAll('.arch-slide')];
+  let current = 0;
+  window.setInterval(() => {
+    slides[current].classList.remove('is-active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('is-active');
+  }, 5200);
 }
 
 async function renderGallery() {
   const response = await fetch('public/assets/manifest.json');
   const { photos } = await response.json();
-  renderGlobe(photos);
+  renderHeroSlideshow(photos);
   const trackOne = document.querySelector('#marqueeTrack');
   const trackTwo = document.querySelector('#marqueeTrackTwo');
   const galleryGrid = document.querySelector('#galleryGrid');

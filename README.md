@@ -6,7 +6,11 @@ Animated single-link e-card invitation covering both celebrations.
 - **Wedding** — 28 November 2026 · St Peter’s Cathedral, Rugarama, Kabale
 - **Reception** — 28 November 2026 · Kabale Golf Course
 
-RSVP: Beckie Rwanika White · +256 747 084 996 · +44 785 102 6329
+RSVP:
+- Arinaitwe Humphrey Twiine · +256 702 486 480 (Uganda, local contact)
+- Jeniffer Muzarirehe · +44 7983 873505 (UK)
+- Elizabeth Nyakapanka · +44 7903 904766 (UK)
+- Solomon Ondoma · +1 (608) 335-7565 (US)
 
 ## Features
 
