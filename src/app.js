@@ -225,11 +225,17 @@ function splitHeroName() {
     [...node.childNodes].forEach((child) => {
       if (child.nodeType === Node.TEXT_NODE) {
         const fragment = document.createDocumentFragment();
-        [...child.textContent].forEach((character) => {
-          const span = document.createElement('span');
-          span.className = 'letter';
-          span.textContent = character === ' ' ? '\u00a0' : character;
-          fragment.appendChild(span);
+        child.textContent.split(/(\s+)/).forEach((chunk) => {
+          if (!chunk) return;
+          const host = document.createElement('span');
+          host.className = /\s/.test(chunk) ? 'space' : 'word';
+          [...chunk].forEach((character) => {
+            const span = document.createElement('span');
+            span.className = 'letter';
+            span.textContent = character === ' ' ? '\u00a0' : character;
+            host.appendChild(span);
+          });
+          fragment.appendChild(host);
         });
         child.replaceWith(fragment);
       } else if (child.nodeType === Node.ELEMENT_NODE) {

@@ -508,7 +508,7 @@ p {
 h1 {
   margin-bottom: 12px;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(4.2rem, 13vw, 11rem);
+  font-size: clamp(3rem, 12.5vw, 11rem);
   line-height: 0.8;
   color: var(--burgundy);
   letter-spacing: -0.07em;
@@ -528,6 +528,11 @@ h3 {
   color: var(--burgundy);
   font-size: clamp(1.7rem, 3vw, 3rem);
   line-height: 0.98;
+}
+
+.hero-name .word {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .hero-name .letter {
