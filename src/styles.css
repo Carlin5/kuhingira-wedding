@@ -680,7 +680,7 @@ h3 {
 .arch-monogram {
   position: absolute;
   left: 50%;
-  bottom: -26px;
+  bottom: 16px;
   transform: translateX(-50%);
   padding: 10px 20px;
   border-radius: 999px;
@@ -732,7 +732,7 @@ h3 {
 
 .arch-caption {
   position: absolute;
-  bottom: 6%;
+  bottom: 4%;
   margin: 0;
   font-size: 0.82rem;
   letter-spacing: 0.22em;
@@ -883,13 +883,14 @@ h3 {
 }
 
 .rsvp-links .mini-button {
+  margin-top: 0;
   text-decoration: none;
 }
 
-.mini-button.light {
+.rsvp-links .mini-button.light {
   color: var(--green);
-  background: rgba(15, 93, 70, 0.1);
-  border-color: rgba(15, 93, 70, 0.25);
+  background: rgba(15, 93, 70, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(15, 93, 70, 0.28);
 }
 
 .footer-quote {
@@ -1783,8 +1784,8 @@ body.is-sealed .footer {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.32);
   }
 
-  .arch-accent.one { left: 0; top: 10%; }
-  .arch-accent.two { right: 0; bottom: 20%; }
+  .arch-accent.one { left: 4%; top: 10%; }
+  .arch-accent.two { right: 4%; bottom: 20%; }
 
   .countdown {
     grid-template-columns: repeat(2, 1fr);
