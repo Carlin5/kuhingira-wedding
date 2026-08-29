@@ -1134,6 +1134,16 @@ h3 {
   padding: 90px 0;
 }
 
+#top,
+#invitation,
+#events,
+#timeline,
+#places,
+#story,
+#rsvp {
+  scroll-margin-top: 16px;
+}
+
 .intro {
   text-align: center;
 }

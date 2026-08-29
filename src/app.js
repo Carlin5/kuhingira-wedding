@@ -25,6 +25,15 @@ const events = {
   }
 };
 
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if (window.location.hash) {
+  history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+}
+
+const resetScrollPosition = () => window.scrollTo(0, 0);
+resetScrollPosition();
+window.addEventListener('load', resetScrollPosition);
+
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const countdownTarget = new Date('2026-11-26T12:00:00+03:00').getTime();
 
@@ -275,6 +284,7 @@ function wireEnvelope() {
     window.setTimeout(() => envelope.classList.add('is-lifting'), liftDelay);
     window.setTimeout(() => envelope.classList.add('is-zooming'), zoomDelay);
     window.setTimeout(() => {
+      resetScrollPosition();
       document.body.classList.remove('is-sealed');
       playHeroIntro();
       window.setTimeout(() => stage.setAttribute('aria-hidden', 'true'), 900);
@@ -284,6 +294,42 @@ function wireEnvelope() {
   envelope.addEventListener('click', open);
   stage.addEventListener('click', (event) => {
     if (event.target === stage) open();
+  });
+}
+
+/* ---------- anchor scrolling ---------- */
+
+function wireAnchorScrolling() {
+  const offset = 16;
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    const id = link.getAttribute('href')?.slice(1);
+    const target = id ? document.getElementById(id) : document.body;
+    if (!target) return;
+
+    event.preventDefault();
+    const targetTop = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
+    window.scrollTo({ top: targetTop, behavior: reduceMotion ? 'auto' : 'smooth' });
+    history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${target.id}`);
+
+    if (!target.matches('a, button, input, select, textarea, [tabindex]')) {
+      target.setAttribute('tabindex', '-1');
+      target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+    }
+    target.focus({ preventScroll: true });
+
+    const realign = () => {
+      const delta = target.getBoundingClientRect().top - offset;
+      if (Math.abs(delta) > 4) {
+        window.scrollTo({ top: Math.max(0, window.scrollY + delta), behavior: 'auto' });
+      }
+    };
+    if ('onscrollend' in window) {
+      window.addEventListener('scrollend', realign, { once: true });
+    }
+    [250, 600, 1100].forEach((delay) => window.setTimeout(realign, delay));
   });
 }
 
@@ -469,7 +515,7 @@ async function renderGallery() {
   const galleryGrid = document.querySelector('#galleryGrid');
 
   const strip = (list) => [...list, ...list]
-    .map((photo) => `<img src="public/${photo.src}" alt="Helen and Ian" loading="lazy" decoding="async">`)
+    .map((photo) => `<img src="public/${photo.src}" alt="Helen and Ian" width="${photo.w}" height="${photo.h}" loading="lazy" decoding="async">`)
     .join('');
 
   if (trackOne) trackOne.innerHTML = strip(photos.slice(0, 14));
@@ -478,7 +524,7 @@ async function renderGallery() {
   galleryGrid.innerHTML = photos
     .map((photo, index) => `
       <figure class="gallery-item reveal" data-delay="${index % 5}">
-        <img src="public/${photo.src}" alt="Helen and Ian, photo ${index + 1}" loading="lazy" decoding="async">
+        <img src="public/${photo.src}" alt="Helen and Ian, photo ${index + 1}" width="${photo.w}" height="${photo.h}" loading="lazy" decoding="async">
       </figure>
     `)
     .join('');
@@ -512,6 +558,7 @@ function init() {
   setInterval(updateCountdown, 1000);
   wireCalendarButtons();
   wireEnvelope();
+  wireAnchorScrolling();
   wireFlipCards();
   wireTilt();
   wireScrollMotion();
