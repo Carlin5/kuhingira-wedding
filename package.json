@@ -16,5 +16,8 @@
     "ecard"
   ],
   "author": "",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@vercel/blob": "^2.8.0"
+  }
 }

@@ -4,8 +4,16 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const requiredFiles = [
   'index.html',
+  'guest-entry.html',
+  'admin.html',
   'src/styles.css',
+  'src/guest-form.css',
+  'src/admin.css',
   'src/app.js',
+  'src/guest-form.js',
+  'src/admin.js',
+  'api/guest-entry.js',
+  'api/admin-submissions.js',
   'public/assets/manifest.json'
 ];
 const requiredCopy = [

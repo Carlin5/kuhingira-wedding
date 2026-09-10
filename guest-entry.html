@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="public/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="src/guest-form.css" />
+    <title>Guest entry · Helen &amp; Ian</title>
+  </head>
+  <body>
+    <main class="guest-shell">
+      <a class="back-link" href="index.html">← Back to Helen &amp; Ian’s invitation</a>
+      <section class="guest-card" id="guestCard">
+        <p class="eyebrow">Helen &amp; Ian</p>
+        <h1>Enter your details to send to Helen &amp; Ian</h1>
+        <p class="intro-copy">
+          Please add everyone in your party. The Kuhingira is on 26 November 2026, and the Wedding &amp; Reception is on 28 November 2026.
+        </p>
+
+        <form id="guestForm" novalidate>
+          <div class="people-heading">
+            <div>
+              <p class="section-kicker">Your party</p>
+              <h2>Who is coming?</h2>
+            </div>
+            <span class="people-limit">Up to 12 people</span>
+          </div>
+          <div id="peopleList" class="people-list"></div>
+          <button class="secondary-button" id="addPerson" type="button">+ Add another person</button>
+
+          <fieldset class="form-section">
+            <legend>Attending</legend>
+            <label class="field-label" for="attending">Which celebration will you attend?</label>
+            <select id="attending" name="attending">
+              <option value="both">Both</option>
+              <option value="kuhingira">Kuhingira · 26 November 2026</option>
+              <option value="wedding">Wedding &amp; Reception · 28 November 2026</option>
+            </select>
+          </fieldset>
+
+          <div class="form-section">
+            <label class="field-label" for="note">Message to Helen &amp; Ian <span>(optional)</span></label>
+            <textarea id="note" name="note" rows="4" maxlength="1000" placeholder="Anything you would like us to know?"></textarea>
+            <p class="field-hint">A short message, dietary note, or kind word.</p>
+          </div>
+
+          <p class="form-status" id="formStatus" aria-live="polite"></p>
+          <button class="submit-button" id="submitGuest" type="submit">Done</button>
+        </form>
+      </section>
+    </main>
+    <script src="src/guest-form.js"></script>
+  </body>
+</html>

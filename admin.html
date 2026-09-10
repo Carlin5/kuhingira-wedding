@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="public/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="src/admin.css" />
+    <title>Guest submissions · Helen &amp; Ian</title>
+  </head>
+  <body>
+    <main class="admin-shell">
+      <a class="back-link" href="index.html">← Back to the invitation</a>
+      <section class="admin-card" id="adminCard">
+        <p class="eyebrow">Helen &amp; Ian</p>
+        <h1>Guest submissions</h1>
+        <p class="intro-copy">A private view of the people who have shared their plans.</p>
+
+        <form id="adminLogin" class="login-form">
+          <label for="adminPassword">Admin password</label>
+          <div class="login-row">
+            <input id="adminPassword" type="password" autocomplete="current-password" required />
+            <button class="primary-button" type="submit">Unlock</button>
+          </div>
+          <p class="admin-status error" id="adminStatus" aria-live="polite"></p>
+        </form>
+
+        <section id="dashboard" class="dashboard" hidden>
+          <div class="dashboard-heading">
+            <div>
+              <p class="section-kicker">Planning view</p>
+              <h2>Everyone who replied</h2>
+            </div>
+            <button class="secondary-button" id="refreshSubmissions" type="button">Refresh</button>
+          </div>
+          <div class="totals" id="totals"></div>
+          <div class="submissions" id="submissions"></div>
+        </section>
+      </section>
+    </main>
+    <script src="src/admin.js"></script>
+  </body>
+</html>
