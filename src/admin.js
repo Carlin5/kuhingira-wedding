@@ -5,6 +5,11 @@ const dashboard = document.querySelector('#dashboard');
 const totals = document.querySelector('#totals');
 const submissions = document.querySelector('#submissions');
 const refreshButton = document.querySelector('#refreshSubmissions');
+const inviteCreateForm = document.querySelector('#inviteCreateForm');
+const inviteLabel = document.querySelector('#inviteLabel');
+const inviteCount = document.querySelector('#inviteCount');
+const inviteStatus = document.querySelector('#inviteStatus');
+const invites = document.querySelector('#invites');
 const storageKey = 'helen-ian-guest-admin-password';
 
 const attendingLabels = {
@@ -16,6 +21,11 @@ const attendingLabels = {
 function setStatus(message, kind = 'error') {
   adminStatus.textContent = message;
   adminStatus.className = `admin-status ${kind}`;
+}
+
+function setInviteStatus(message, kind = '') {
+  inviteStatus.textContent = message;
+  inviteStatus.className = `invite-status${kind ? ` ${kind}` : ''}`;
 }
 
 function text(value) {
@@ -107,6 +117,153 @@ function renderSubmissions(items) {
   });
 }
 
+function makeInviteAction(label, action, code) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'invite-action';
+  button.textContent = label;
+  button.addEventListener('click', () => runInviteAction(action, code, button));
+  return button;
+}
+
+function inviteUrl(code) {
+  return `${window.location.origin}/?i=${code}`;
+}
+
+async function copyInviteLink(code, button) {
+  const url = inviteUrl(code);
+  button.disabled = true;
+  try {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      await navigator.clipboard.writeText(url);
+      setInviteStatus('Link copied.');
+      return;
+    }
+    const temporaryInput = document.createElement('input');
+    temporaryInput.value = url;
+    temporaryInput.setAttribute('aria-label', 'Invitation link');
+    document.body.appendChild(temporaryInput);
+    temporaryInput.select();
+    setInviteStatus('Copy this link manually.');
+    temporaryInput.remove();
+  } catch (error) {
+    setInviteStatus('Copy this link manually.', 'error');
+  } finally {
+    button.disabled = false;
+  }
+}
+
+function renderInvites(items) {
+  invites.replaceChildren();
+  if (!items.length) {
+    invites.appendChild(makeText('p', 'empty-state', 'No invitation links yet.'));
+    return;
+  }
+
+  items.forEach((invite) => {
+    const card = document.createElement('article');
+    card.className = 'invite-item';
+    const heading = document.createElement('div');
+    heading.className = 'invite-item-heading';
+    heading.append(
+      makeText('h3', '', text(invite.label) || 'Unnamed guest'),
+      makeText('span', 'invite-code', invite.code)
+    );
+    card.appendChild(heading);
+    card.appendChild(makeText('p', 'invite-url', inviteUrl(invite.code)));
+
+    let statusText = 'Not opened yet';
+    if (invite.revoked) {
+      statusText = 'Revoked';
+    } else if (invite.isBound) {
+      statusText = `Locked to a device · ${formatDate(invite.boundAt)}`;
+    }
+    card.appendChild(makeText('p', 'invite-item-status', statusText));
+    if (invite.openedCount > 0) {
+      card.appendChild(makeText('p', 'invite-opened', `Opened ${invite.openedCount} ${invite.openedCount === 1 ? 'time' : 'times'}`));
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'invite-actions';
+    const copy = makeInviteAction('Copy link', 'copy', invite.code);
+    copy.addEventListener('click', () => copyInviteLink(invite.code, copy));
+    actions.appendChild(copy);
+    if (invite.isBound) actions.appendChild(makeInviteAction('Reset device', 'reset', invite.code));
+    actions.appendChild(makeInviteAction(invite.revoked ? 'Restore' : 'Revoke', invite.revoked ? 'restore' : 'revoke', invite.code));
+    actions.appendChild(makeInviteAction('Delete', 'delete', invite.code));
+    card.appendChild(actions);
+    invites.appendChild(card);
+  });
+}
+
+async function adminRequest(password, action, payload = {}) {
+  const response = await fetch('/api/admin-invites', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password, action, ...payload })
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    if (response.status === 401) sessionStorage.removeItem(storageKey);
+    throw new Error(result.error || 'Could not update invitation links');
+  }
+  return result;
+}
+
+async function loadInvites(password) {
+  try {
+    const result = await adminRequest(password, 'list');
+    renderInvites(result.invites);
+  } catch (error) {
+    setInviteStatus(error.message, 'error');
+  }
+}
+
+async function runInviteAction(action, code, button) {
+  const password = sessionStorage.getItem(storageKey);
+  if (!password) return;
+  if (action === 'reset' && !window.confirm('Reset this invitation so it can be opened on another device?')) return;
+  if (action === 'delete' && !window.confirm('Delete this invitation link permanently?')) return;
+  if (action === 'copy') return;
+
+  button.disabled = true;
+  try {
+    await adminRequest(password, action, { code });
+    setInviteStatus(action === 'delete' ? 'Invitation link deleted.' : 'Invitation link updated.');
+    await loadInvites(password);
+  } catch (error) {
+    setInviteStatus(error.message, 'error');
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function createInvites(event) {
+  event.preventDefault();
+  const password = sessionStorage.getItem(storageKey);
+  if (!password) return;
+  const count = Number(inviteCount.value);
+  if (!Number.isInteger(count) || count < 1 || count > 25) {
+    setInviteStatus('Choose between 1 and 25 links.', 'error');
+    return;
+  }
+  const button = inviteCreateForm.querySelector('button[type="submit"]');
+  button.disabled = true;
+  try {
+    const result = await adminRequest(password, 'create', {
+      label: inviteLabel.value.trim(),
+      count
+    });
+    inviteLabel.value = '';
+    setInviteStatus(`Created ${result.created.length} invitation ${result.created.length === 1 ? 'link' : 'links'}.`, 'success');
+    await loadInvites(password);
+  } catch (error) {
+    setInviteStatus(error.message, 'error');
+  } finally {
+    button.disabled = false;
+  }
+}
+
 async function loadSubmissions(password) {
   refreshButton.disabled = true;
   refreshButton.textContent = 'Refreshing…';
@@ -139,13 +296,23 @@ async function loadSubmissions(password) {
 
 loginForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  loadSubmissions(passwordInput.value);
+  const password = passwordInput.value;
+  loadSubmissions(password);
+  loadInvites(password);
 });
 
 refreshButton.addEventListener('click', () => {
   const password = sessionStorage.getItem(storageKey);
-  if (password) loadSubmissions(password);
+  if (password) {
+    loadSubmissions(password);
+    loadInvites(password);
+  }
 });
 
+inviteCreateForm.addEventListener('submit', createInvites);
+
 const savedPassword = sessionStorage.getItem(storageKey);
-if (savedPassword) loadSubmissions(savedPassword);
+if (savedPassword) {
+  loadSubmissions(savedPassword);
+  loadInvites(savedPassword);
+}

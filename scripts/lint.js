@@ -7,13 +7,17 @@ const requiredFiles = [
   'guest-entry.html',
   'admin.html',
   'src/styles.css',
+  'src/invite-gate.css',
   'src/guest-form.css',
   'src/admin.css',
   'src/app.js',
+  'src/invite-gate.js',
   'src/guest-form.js',
   'src/admin.js',
   'api/guest-entry.js',
   'api/admin-submissions.js',
+  'api/invite-check.js',
+  'api/admin-invites.js',
   'public/assets/manifest.json'
 ];
 const requiredCopy = [

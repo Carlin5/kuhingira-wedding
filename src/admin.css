@@ -161,6 +161,133 @@ button:disabled {
   margin-top: 36px;
 }
 
+.invite-manager {
+  margin-bottom: 28px;
+  padding: 20px;
+  border: 1px solid rgba(15, 93, 70, 0.16);
+  border-radius: 20px;
+  background: rgba(15, 93, 70, 0.05);
+}
+
+.invite-manager-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.invite-status {
+  min-height: 1.4em;
+  margin: 0;
+  color: var(--green);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.invite-status.error {
+  color: #a11635;
+}
+
+.invite-status.success {
+  color: var(--green);
+}
+
+.invite-create-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.invite-create-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--burgundy);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.invite-create-form input {
+  width: 100%;
+}
+
+.invites {
+  display: grid;
+  gap: 10px;
+}
+
+.invite-item {
+  padding: 16px;
+  border: 1px solid rgba(91, 16, 36, 0.14);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.invite-item-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.invite-code {
+  color: var(--green);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.invite-url {
+  margin: 8px 0;
+  color: var(--green);
+  font-size: 0.84rem;
+  overflow-wrap: anywhere;
+}
+
+.invite-item-status,
+.invite-opened {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.invite-opened {
+  color: var(--burgundy);
+  font-weight: 800;
+}
+
+.invite-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.invite-action {
+  border: 1px solid rgba(15, 93, 70, 0.22);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--green);
+  background: rgba(15, 93, 70, 0.06);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.invite-action:last-child {
+  border-color: rgba(161, 22, 53, 0.2);
+  color: #a11635;
+  background: rgba(161, 22, 53, 0.05);
+}
+
+.invite-action:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
 .dashboard-heading {
   display: flex;
   justify-content: space-between;
@@ -293,9 +420,18 @@ button:disabled {
   }
 
   .login-row,
-  .dashboard-heading {
+  .dashboard-heading,
+  .invite-manager-heading {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .invite-status {
+    text-align: left;
+  }
+
+  .invite-create-form {
+    grid-template-columns: 1fr;
   }
 
   .totals {

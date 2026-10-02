@@ -2,10 +2,13 @@ const { spawnSync } = require('child_process');
 
 const files = [
   'src/app.js',
+  'src/invite-gate.js',
   'src/guest-form.js',
   'src/admin.js',
   'api/guest-entry.js',
   'api/admin-submissions.js',
+  'api/invite-check.js',
+  'api/admin-invites.js',
   'scripts/build.js',
   'scripts/lint.js',
   'scripts/typecheck.js'

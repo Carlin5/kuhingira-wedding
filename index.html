@@ -14,8 +14,19 @@
     <link rel="preload" href="src/styles.css" as="style" />
     <link rel="preload" href="public/assets/photo-30.webp" as="image" />
     <link rel="stylesheet" href="src/styles.css" />
+    <link rel="stylesheet" href="src/invite-gate.css" />
+    <script src="src/invite-gate.js" defer></script>
   </head>
-  <body class="is-sealed">
+  <body class="is-sealed invite-pending">
+    <div class="invite-gate" id="inviteGate" role="status" aria-live="polite">
+      <div class="invite-gate-card">
+        <p class="invite-gate-kicker">Helen &amp; Ian</p>
+        <h1 class="invite-gate-title" id="inviteGateTitle">Checking your invitation…</h1>
+        <p class="invite-gate-message" id="inviteGateMessage">One moment while we unseal your envelope.</p>
+        <div class="invite-gate-spinner" id="inviteGateSpinner" aria-hidden="true"></div>
+        <button class="invite-gate-retry" id="inviteGateRetry" type="button" hidden>Try again</button>
+      </div>
+    </div>
     <div class="glow" aria-hidden="true"></div>
     <div class="petals" aria-hidden="true"></div>
     <div class="scroll-progress" aria-hidden="true"><span></span></div>

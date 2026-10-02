@@ -33,6 +33,27 @@
             </div>
             <button class="secondary-button" id="refreshSubmissions" type="button">Refresh</button>
           </div>
+          <section class="invite-manager" aria-labelledby="inviteManagerTitle">
+            <div class="invite-manager-heading">
+              <div>
+                <p class="section-kicker">Private links</p>
+                <h2 id="inviteManagerTitle">Invitation links</h2>
+              </div>
+              <p class="invite-status" id="inviteStatus" aria-live="polite"></p>
+            </div>
+            <form class="invite-create-form" id="inviteCreateForm">
+              <label>
+                <span>Guest or family name</span>
+                <input id="inviteLabel" type="text" maxlength="120" placeholder="Guest or family name" />
+              </label>
+              <label>
+                <span>How many links?</span>
+                <input id="inviteCount" type="number" min="1" max="25" step="1" value="1" />
+              </label>
+              <button class="primary-button" type="submit">Create link</button>
+            </form>
+            <div id="invites" class="invites"></div>
+          </section>
           <div class="totals" id="totals"></div>
           <div class="submissions" id="submissions"></div>
         </section>

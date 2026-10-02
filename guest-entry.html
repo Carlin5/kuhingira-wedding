@@ -6,9 +6,20 @@
     <meta name="robots" content="noindex" />
     <link rel="icon" href="public/assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="src/guest-form.css" />
+    <link rel="stylesheet" href="src/invite-gate.css" />
+    <script src="src/invite-gate.js" defer></script>
     <title>Guest entry · Helen &amp; Ian</title>
   </head>
-  <body>
+  <body class="invite-pending">
+    <div class="invite-gate" id="inviteGate" role="status" aria-live="polite">
+      <div class="invite-gate-card">
+        <p class="invite-gate-kicker">Helen &amp; Ian</p>
+        <h1 class="invite-gate-title" id="inviteGateTitle">Checking your invitation…</h1>
+        <p class="invite-gate-message" id="inviteGateMessage">One moment while we unseal your envelope.</p>
+        <div class="invite-gate-spinner" id="inviteGateSpinner" aria-hidden="true"></div>
+        <button class="invite-gate-retry" id="inviteGateRetry" type="button" hidden>Try again</button>
+      </div>
+    </div>
     <main class="guest-shell">
       <a class="back-link" href="index.html">← Back to Helen &amp; Ian’s invitation</a>
       <section class="guest-card" id="guestCard">

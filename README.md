@@ -21,6 +21,10 @@ RSVP:
 - Animated photo marquee, masonry gallery and video moments
 - White / burgundy / green theme, reduced-motion support
 
+## Invite-only links
+
+Helen &amp; Ian can create a unique invitation link for each guest or family from the private admin page. The first device to open a link is bound to it; another device sees an invalid-link message instead. Admins can copy links, reset a device lock, revoke or restore a link, and delete it when it is no longer needed.
+
 ## Local development
 
 ```bash
